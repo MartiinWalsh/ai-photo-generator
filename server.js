@@ -17,8 +17,8 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/api/photo", async (req, res) => {
-  const prompt = req.body.prompt;
   try {
+    const prompt = req.body.prompt;
     const response = await openai.createImage({
       prompt,
       n: 1,
@@ -29,6 +29,9 @@ app.post("/api/photo", async (req, res) => {
     res.send({ image });
   } catch (error) {
     console.log(error);
+    res
+      .status(500)
+      .send(error?.response.data.error.message || "Something went wrong");
   }
 });
 
